@@ -1,0 +1,81 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Dependency directories
+node_modules/
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+
+# Build output
+dist/
+build/
+coverage/
+
+# TypeScript
+*.tsbuildinfo
+
+# IDE
+.vscode/
+.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Testing
+coverage/
+.nyc_output/
+
+# Temporary files
+tmp/
+temp/
+
+# Cache
+.cache/
+
+# Prisma (if using Prisma)
+prisma/dev.db
+prisma/dev.db-journal
+
+# TypeORM
+*.sqlite
+
+# Docker
+docker-compose.override.yml
+
+# Uploads
+uploads/
+public/uploads/
+
+# Swagger generated files
+swagger-output.json
+
+# ESLint cache
+.eslintcache
+
+# Package manager
+.pnp
+.pnp.js
+
+# Local history
+.history/
+
+# Misc
+*.swp
+*.swo
