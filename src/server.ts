@@ -1,3 +1,4 @@
+import 'reflect-metadata'; // Required for TypeORM to work properly
 import 'dotenv/config'; // Load environment variables from .env file
 import app from './app';
 import { env } from './config/env';
@@ -5,17 +6,20 @@ import { AppDataSource } from './config/database';
 
 const PORT = env.PORT || 3000;
 
-// Initialize the database connection
-AppDataSource.initialize()
-  .then(() => {
+async function bootstrap() {
+  try {
+    await AppDataSource.initialize();
+
     console.log('Database connection established successfully.');
-  })
-  .catch((error) => {
+
+    app.listen(PORT, () => {
+      console.log(`Server running on http://localhost:${PORT}`);
+    });
+  } catch (error) {
     console.error('Error during database connection initialization:', error);
-  });
 
+    process.exit(1);
+  }
+}
 
-// Start the server and listen on the specified port
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+bootstrap();

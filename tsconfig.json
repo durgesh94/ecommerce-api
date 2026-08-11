@@ -4,6 +4,9 @@
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
 
+    "experimentalDecorators": true, // Enable experimental decorators for TypeORM entities
+    "emitDecoratorMetadata": true, // Enable emitting of decorator metadata for TypeORM entities
+
     "rootDir": "./src",
     "outDir": "./dist",
 
