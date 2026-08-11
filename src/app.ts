@@ -34,7 +34,7 @@ app.use(pinoHttp({ logger })); // This middleware gets executed for every reques
 app.use(express.json());
 
 // Health check endpoint
-app.get('/health', (_req, res) => {
+app.get('/api/v1/health', (_req, res) => {
   res.status(200).json({
     success: true,
     message: 'Server is running',

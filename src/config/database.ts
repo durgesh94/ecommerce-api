@@ -10,11 +10,11 @@ export const AppDataSource = new DataSource({
   password: env.database.password,
   database: env.database.name,
 
-  synchronize: true, // Set to true only in development, false in production
+  synchronize: false, // Set to true only in development, false in production
 
   logging: true, // Enable query logging for debugging purposes
 
   entities: ['src/modules/**/*.entity.ts'], 
 
-  migrations: ['src/database/migrations/*.ts'], 
+  migrations: ['src/migrations/*.ts'], 
 });
