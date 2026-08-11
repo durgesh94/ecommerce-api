@@ -5,6 +5,8 @@ import cors from 'cors';
 import compression from 'compression';
 
 import userRouter from './modules/user/user.routes';
+import productRouter from './modules/product/product.routes';
+
 import { logger } from './config/logger';
 import { env } from './config/env';
 
@@ -43,6 +45,7 @@ app.get('/api/v1/health', (_req, res) => {
 
 // user routes
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/products', productRouter);
 
 // Not Found middleware
 app.use(notFoundHandler);
