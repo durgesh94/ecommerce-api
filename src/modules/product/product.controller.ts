@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 
 import { createProduct, getProductById, getProducts } from './product.service';
+import { productQuerySchema } from './product.dto';
 
 export const createProductController = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -17,13 +18,29 @@ export const createProductController = async (req: Request, res: Response, next:
   }
 };
 
-export const getProductsController = async (_req: Request, res: Response, next: NextFunction) => {
+// export const getProductsController = async (_req: Request, res: Response, next: NextFunction) => {
+//   try {
+//     const products = await getProducts();
+
+//     res.status(200).json({
+//       success: true,
+//       data: products,
+//     });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+export const getProductsController = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const products = await getProducts();
+    const query = productQuerySchema.parse(req.query);
+
+    const result = await getProducts(query);
 
     res.status(200).json({
       success: true,
-      data: products,
+      data: result.products,
+      pagination: result.pagination,
     });
   } catch (error) {
     next(error);
