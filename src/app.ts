@@ -5,9 +5,11 @@ import cors from 'cors';
 import compression from 'compression';
 
 import userRouter from './modules/user/user.routes';
-import { errorHandler } from './common/middleware/error.middleware';
 import { logger } from './config/logger';
 import { env } from './config/env';
+
+import { errorHandler } from './common/middleware/error.middleware';
+import { notFoundHandler } from './common/middleware/notFound.middleware';
 
 // Create an instance of the Express application
 const app = express();
@@ -41,6 +43,9 @@ app.get('/health', (_req, res) => {
 
 // user routes
 app.use('/api/v1/users', userRouter);
+
+// Not Found middleware
+app.use(notFoundHandler);
 
 // Error handling middleware
 app.use(errorHandler);
