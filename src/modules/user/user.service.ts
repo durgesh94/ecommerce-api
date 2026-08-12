@@ -50,7 +50,7 @@ export class UserService {
       throw new AppError('User not found', 404);
     }
     // Check if a user with the same email already exists
-    const existingUser = await this.userRepository.findUserByEmail(updateData?.email);
+    const existingUser = await this.userRepository.findUserByEmail(updateData?.email ?? '');
     if (existingUser) {
       throw new AppError('Email already registered', 409);
     }

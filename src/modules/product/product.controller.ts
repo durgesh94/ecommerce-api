@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 
 import { createProduct, getProductById, getProducts } from './product.service';
-import { productQuerySchema } from './product.dto';
+import { productQuerySchema } from './product.validation';
+import { ApiResponse } from '../../common/utils/api-response';
 
 export const createProductController = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -9,8 +10,7 @@ export const createProductController = async (req: Request, res: Response, next:
 
     const product = await createProduct(name, description, price, stock);
 
-    res.status(201).json({
-      success: true,
+    ApiResponse.success(res, {
       data: product,
     });
   } catch (error) {
@@ -37,11 +37,7 @@ export const getProductsController = async (req: Request, res: Response, next: N
 
     const result = await getProducts(query);
 
-    res.status(200).json({
-      success: true,
-      data: result.products,
-      pagination: result.pagination,
-    });
+    ApiResponse.paginated(res, result.products, result.pagination);
   } catch (error) {
     next(error);
   }
@@ -53,8 +49,7 @@ export const getProductByIdController = async (req: Request, res: Response, next
 
     const product = await getProductById(id);
 
-    res.status(200).json({
-      success: true,
+    ApiResponse.success(res, {
       data: product,
     });
   } catch (error) {

@@ -1,30 +1,18 @@
-export interface CreateUserDto {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  role?: string; // Optional, defaults to 'USER'
-}
+import { z } from 'zod';
+import { createUserSchema, updateUserSchema } from './user.schema';
 
-export interface UpdateUserDto {
-  firstName?: string;
-  lastName?: string;
-  email?: string;
-  password?: string;
-}
+export type CreateUserDto = z.infer<typeof createUserSchema>;
 
-export class UserResponseDto {
+export type UpdateUserDto = z.infer<typeof updateUserSchema>;
+
+export type UserRole = 'USER' | 'ADMIN';
+
+export interface UserResponseDto {
   id: string;
   firstName: string;
   lastName: string;
   email: string;
-  role: string;
-
-  constructor(user: any) {
-    this.id = user.id;
-    this.firstName = user.firstName;
-    this.lastName = user.lastName;
-    this.email = user.email;
-    this.role = user.role;
-  }
+  role: UserRole;
+  createdAt: Date;
+  updatedAt: Date;
 }

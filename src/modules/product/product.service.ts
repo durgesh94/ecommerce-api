@@ -1,5 +1,5 @@
 import { productRepository } from './product.repository';
-import { ProductQuery } from './product.dto';
+import { ProductQuery } from './product.validation';
 
 export const createProduct = async (
   name: string,
