@@ -1,58 +1,27 @@
-import { Request, Response, NextFunction } from 'express';
-
-import { createProduct, getProductById, getProducts } from './product.service';
+import { ProductService } from './product.service';
 import { productQuerySchema } from './product.validation';
+import { CreateProductDto } from './product.dto';
 import { ApiResponse } from '../../common/utils/api-response';
+import { asyncHandler } from '../../common/utils/async-handler';
 
-export const createProductController = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const { name, description, price, stock } = req.body;
+export class ProductController {
+  constructor(private readonly productService: ProductService) {}
 
-    const product = await createProduct(name, description, price, stock);
+  createProduct = asyncHandler(async (req, res) => {
+    const productData: CreateProductDto = req.body;
+    const product = await this.productService.createProduct(productData);
+    ApiResponse.success(res, product, 'Product created successfully');
+  });
 
-    ApiResponse.success(res, {
-      data: product,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
-// export const getProductsController = async (_req: Request, res: Response, next: NextFunction) => {
-//   try {
-//     const products = await getProducts();
-
-//     res.status(200).json({
-//       success: true,
-//       data: products,
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
-
-export const getProductsController = async (req: Request, res: Response, next: NextFunction) => {
-  try {
+  getProducts = asyncHandler(async (req, res) => {
     const query = productQuerySchema.parse(req.query);
-
-    const result = await getProducts(query);
-
+    const result = await this.productService.getProducts(query);
     ApiResponse.paginated(res, result.products, result.pagination);
-  } catch (error) {
-    next(error);
-  }
-};
+  });
 
-export const getProductByIdController = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const id = Number(req.params.id);
-
-    const product = await getProductById(id);
-
-    ApiResponse.success(res, {
-      data: product,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
+  getProductById = asyncHandler(async (req, res) => {
+    const id = req.params.id;
+    const product = await this.productService.getProductById(id);
+    ApiResponse.success(res, product, 'Product retrieved successfully');
+  });
+}

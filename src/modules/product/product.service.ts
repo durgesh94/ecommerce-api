@@ -1,89 +1,43 @@
-import { productRepository } from './product.repository';
+import { AppError } from '../../common/errors/app-error';
+import { CreateProductDto } from './product.dto';
+import { Product } from './product.entity';
+import { ProductRepository } from './product.repository';
 import { ProductQuery } from './product.validation';
 
-export const createProduct = async (
-  name: string,
-  description: string | null,
-  price: number,
-  stock: number,
-) => {
-  const product = productRepository.create({
-    name,
-    description,
-    price,
-    stock,
-  });
+export class ProductService {
+  private productRepository: ProductRepository = new ProductRepository();
 
-  return productRepository.save(product);
-};
+  async createProduct(productData: CreateProductDto): Promise<Product> {
+    const product = await this.productRepository.createProduct(productData);
+    return product;
+  }
 
-// export const getProducts = async () => {
-//   return productRepository.find({
-//     where: {
-//       isActive: true,
-//     },
-//     order: {
-//       createdAt: 'DESC',
-//     },
-//   });
-// };
+  async getProducts(query: ProductQuery) {
+    const { page, limit } = query;
+    const { products, total } = await this.productRepository.getProducts(query);
+    
+    if (products.length === 0) {
+      throw new AppError('No products found', 404);
+    }
 
-export const getProducts = async (query: ProductQuery) => {
-  const { page, limit, search, minPrice, maxPrice, sortBy, sortOrder } = query;
-
-  const queryBuilder = productRepository
-    .createQueryBuilder('product')
-    .where('product.isActive = :isActive', {
-      isActive: true,
-    });
-
-  if (search) {
-    queryBuilder.andWhere(
-      `(product.name ILIKE :search
-        OR product.description ILIKE :search)`,
-      {
-        search: `%${search}%`,
+    return {
+      products,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+        hasNextPage: page * limit < total,
+        hasPreviousPage: page > 1,
       },
-    );
+    };
   }
 
-  if (minPrice !== undefined) {
-    queryBuilder.andWhere('product.price >= :minPrice', {
-      minPrice,
-    });
+  async getProductById(id: string): Promise<Product | null> {
+    const product = await this.productRepository.getProductById(id);
+    if (!product) {
+      throw new AppError('Product not found', 404);
+    }
+    return product;
   }
-
-  if (maxPrice !== undefined) {
-    queryBuilder.andWhere('product.price <= :maxPrice', {
-      maxPrice,
-    });
-  }
-
-  queryBuilder
-    .orderBy(`product.${sortBy}`, sortOrder.toUpperCase() as 'ASC' | 'DESC')
-    .skip((page - 1) * limit)
-    .take(limit);
-
-  const [products, total] = await queryBuilder.getManyAndCount();
-
-  return {
-    products,
-    pagination: {
-      page,
-      limit,
-      total,
-      totalPages: Math.ceil(total / limit),
-      hasNextPage: page * limit < total,
-      hasPreviousPage: page > 1,
-    },
-  };
-};
-
-export const getProductById = async (id: number) => {
-  return productRepository.findOne({
-    where: {
-      id,
-      isActive: true,
-    },
-  });
-};
+}

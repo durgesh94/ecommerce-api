@@ -1,17 +1,17 @@
 import { Router } from 'express';
 
-import {
-  createProductController,
-  getProductByIdController,
-  getProductsController,
-} from './product.controller';
+import { ProductController } from './product.controller';
+import { ProductService } from './product.service';
 
-const router = Router();
+const productService = new ProductService();
+const productController = new ProductController(productService);
 
-router.post('/', createProductController);
+const productRouter = Router();
 
-router.get('/', getProductsController);
+productRouter.post('/', productController.createProduct);
 
-router.get('/:id', getProductByIdController);
+productRouter.get('/', productController.getProducts);
 
-export default router;
+productRouter.get('/:id', productController.getProductById);
+
+export default productRouter;

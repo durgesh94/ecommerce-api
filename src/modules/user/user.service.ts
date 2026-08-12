@@ -2,11 +2,12 @@ import bcrypt from 'bcryptjs';
 import { CreateUserDto } from './user.dto';
 import { UserRepository } from './user.repository';
 import { AppError } from '../../common/errors/app-error';
+import { User } from './user.entity';
 
 export class UserService {
   private userRepository: UserRepository = new UserRepository();
 
-  async createUser(userData: CreateUserDto): Promise<any> {
+  async createUser(userData: CreateUserDto): Promise<User> {
     // Check if a user with the same email already exists
     const existingUser = await this.userRepository.findUserByEmail(userData.email);
     if (existingUser) {
@@ -21,7 +22,7 @@ export class UserService {
     return createdUser;
   }
 
-  async findUserByEmail(email: string) {
+  async findUserByEmail(email: string): Promise<User> {
     // Check if the user exists before returning
     const user = await this.userRepository.findUserByEmail(email);
     if (!user) {
@@ -30,7 +31,7 @@ export class UserService {
     return user;
   }
 
-  async findUserById(id: string) {
+  async findUserById(id: string): Promise<User> {
     // Check if the user exists before returning
     const user = await this.userRepository.findUserById(id);
     if (!user) {
@@ -39,11 +40,11 @@ export class UserService {
     return user;
   }
 
-  async getAllUsers() {
+  async getAllUsers(): Promise<User[]> {
     return await this.userRepository.getAllUsers();
   }
 
-  async updateUser(id: string, updateData: Partial<CreateUserDto>) {
+  async updateUser(id: string, updateData: Partial<CreateUserDto>): Promise<User> {
     // Check if the user exists before updating
     const user = await this.userRepository.findUserById(id);
     if (!user) {
@@ -66,7 +67,7 @@ export class UserService {
     return updatedUser;
   }
 
-  async deleteUser(id: string) {
+  async deleteUser(id: string): Promise<void> {
     const deleted = await this.userRepository.deleteUser(id);
     if (!deleted) {
       throw new AppError('User not found', 404);

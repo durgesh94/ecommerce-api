@@ -6,14 +6,14 @@ export interface CreateProductDto {
 }
 
 export interface UpdateProductDto {
-  name?: string;
-  description?: string;
-  price?: number;
-  stock?: number;
+  name: string;
+  description: string;
+  price: number;
+  stock: number;
 }
 
 export interface ProductQuery {
-  name?: string;
-  minPrice?: number;
-  maxPrice?: number;
+  name: string;
+  minPrice: number;
+  maxPrice: number;
 }
