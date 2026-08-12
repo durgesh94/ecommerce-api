@@ -1,5 +1,5 @@
 import { ProductService } from './product.service';
-import { productQuerySchema } from './product.validation';
+import { productQuerySchema } from './product.schema';
 import { CreateProductDto } from './product.dto';
 import { ApiResponse } from '../../common/utils/api-response';
 import { asyncHandler } from '../../common/utils/async-handler';

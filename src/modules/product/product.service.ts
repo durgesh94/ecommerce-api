@@ -2,7 +2,7 @@ import { AppError } from '../../common/errors/app-error';
 import { CreateProductDto } from './product.dto';
 import { Product } from './product.entity';
 import { ProductRepository } from './product.repository';
-import { ProductQuery } from './product.validation';
+import { ProductQuery } from './product.schema';
 
 export class ProductService {
   private productRepository: ProductRepository = new ProductRepository();
@@ -15,7 +15,7 @@ export class ProductService {
   async getProducts(query: ProductQuery) {
     const { page, limit } = query;
     const { products, total } = await this.productRepository.getProducts(query);
-    
+
     if (products.length === 0) {
       throw new AppError('No products found', 404);
     }
