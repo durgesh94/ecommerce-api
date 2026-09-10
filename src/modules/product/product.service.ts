@@ -2,7 +2,7 @@ import { AppError } from '../../common/errors/app-error';
 import { CreateProductDto } from './product.dto';
 import { Product } from './product.entity';
 import { ProductRepository } from './product.repository';
-import { ProductQuery } from './product.schema';
+import { ProductQuery } from './product.dto';
 
 export class ProductService {
   private productRepository: ProductRepository = new ProductRepository();

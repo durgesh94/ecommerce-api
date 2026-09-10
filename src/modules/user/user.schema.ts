@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+export const userRoleSchema = z.enum(['USER', 'ADMIN']);
+
 export const createUserSchema = z.object({
   firstName: z.string().min(2, 'First name must be at least 2 characters').max(50),
 
@@ -9,7 +11,7 @@ export const createUserSchema = z.object({
 
   password: z.string().min(8, 'Password must be at least 8 characters'),
 
-  role: z.enum(['USER', 'ADMIN']).optional(),
+  role: userRoleSchema.optional(),
 });
 
 export const updateUserSchema = z.object({
@@ -20,6 +22,7 @@ export const updateUserSchema = z.object({
   email: z.string().email('Invalid email address').optional(),
 
   password: z.string().min(8, 'Password must be at least 8 characters').optional(),
+  role: userRoleSchema.optional(),
 });
 
 export const userIdParamSchema = z.object({

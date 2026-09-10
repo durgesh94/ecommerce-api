@@ -1,7 +1,10 @@
 import { z } from 'zod';
 
 export const createProductSchema = z.object({
-  name: z.string().min(1, 'Product name is required').max(100, 'Product name must be at most 100 characters'),
+  name: z
+    .string()
+    .min(1, 'Product name is required')
+    .max(100, 'Product name must be at most 100 characters'),
 
   description: z.string().optional(),
 
@@ -26,4 +29,4 @@ export const productQuerySchema = z.object({
   sortOrder: z.enum(['asc', 'desc']).default('desc'),
 });
 
-export type ProductQuery = z.infer<typeof productQuerySchema>;
+export const updateProductSchema = createProductSchema.partial();

@@ -2,7 +2,7 @@ import { Repository } from 'typeorm';
 import { AppDataSource } from '../../config/database';
 import { CreateProductDto } from './product.dto';
 import { Product } from './product.entity';
-import { ProductQuery } from './product.schema';
+import { ProductQuery } from './product.dto';
 
 const SORT_COLUMN_MAP = {
   name: 'product.name',

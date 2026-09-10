@@ -1,8 +1,9 @@
 import bcrypt from 'bcryptjs';
-import { CreateUserDto } from './user.dto';
+import { CreateUserDto, UserResponseDto } from './user.dto';
 import { UserRepository } from './user.repository';
 import { AppError } from '../../common/errors/app-error';
 import { User } from './user.entity';
+import { UserMapper } from './user.mapper';
 
 export class UserService {
   private userRepository: UserRepository = new UserRepository();
@@ -22,29 +23,30 @@ export class UserService {
     return createdUser;
   }
 
-  async findUserByEmail(email: string): Promise<User> {
+  async findUserByEmail(email: string): Promise<UserResponseDto> {
     // Check if the user exists before returning
     const user = await this.userRepository.findUserByEmail(email);
     if (!user) {
       throw new AppError('User not found', 404);
     }
-    return user;
+    return UserMapper.toResponse(user);
   }
 
-  async findUserById(id: string): Promise<User> {
+  async findUserById(id: string): Promise<UserResponseDto> {
     // Check if the user exists before returning
     const user = await this.userRepository.findUserById(id);
     if (!user) {
       throw new AppError('User not found', 404);
     }
-    return user;
+    return UserMapper.toResponse(user);
   }
 
-  async getAllUsers(): Promise<User[]> {
-    return await this.userRepository.getAllUsers();
+  async getAllUsers(): Promise<UserResponseDto[]> {
+    const users = await this.userRepository.getAllUsers();
+    return users.map(UserMapper.toResponse);
   }
 
-  async updateUser(id: string, updateData: Partial<CreateUserDto>): Promise<User> {
+  async updateUser(id: string, updateData: Partial<CreateUserDto>): Promise<UserResponseDto> {
     // Check if the user exists before updating
     const user = await this.userRepository.findUserById(id);
     if (!user) {
@@ -64,7 +66,7 @@ export class UserService {
     if (!updatedUser) {
       throw new AppError('User not found', 404);
     }
-    return updatedUser;
+    return UserMapper.toResponse(updatedUser);
   }
 
   async deleteUser(id: string): Promise<void> {
