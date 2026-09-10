@@ -6,7 +6,7 @@ export class InitialSchema1786444680871 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
             CREATE TABLE "products" (
-            "id" SERIAL NOT NULL, 
+            "id" uuid NOT NULL DEFAULT uuid_generate_v4(), 
             "name" character varying(150) NOT NULL, 
             "description" text, 
             "price" numeric(10,2) NOT NULL, 
