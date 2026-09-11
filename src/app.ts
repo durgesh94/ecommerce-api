@@ -6,6 +6,7 @@ import compression from 'compression';
 
 import userRouter from './modules/user/user.routes';
 import productRouter from './modules/product/product.routes';
+import addressRouter from './modules/address/address.route';
 
 import { logger } from './config/logger';
 import { env } from './config/env';
@@ -43,9 +44,10 @@ app.get('/api/v1/health', (_req, res) => {
   });
 });
 
-// user routes
+// routes 
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/products', productRouter);
+app.use('/api/v1/addresses', addressRouter);
 
 // Not Found middleware
 app.use(notFoundHandler);
