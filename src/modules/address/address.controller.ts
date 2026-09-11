@@ -11,7 +11,6 @@ export class AddressController {
   }
 
   createAddress = asyncHandler(async (req, res) => {
-    console.log('Request body:', req.body);
     const address: CreateAddressDto = req.body;
     const savedAddress = await this.service.createAddress(address);
     ApiResponse.success(res, savedAddress, 'Address created successfully');
